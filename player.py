@@ -23,7 +23,8 @@ class Player(pygame.sprite.Sprite):
 
 		super(Player, self).__init__()  #call to parent constructor
 
-		self.image = pygame.image.load('tiny_krystal.png')
+		# self.image = pygame.image.load('tiny_krystal.png')
+		self.image = pygame.Surface(constants.HERO_SIZE)
 		self.rect = self.image.get_rect()
 
 	
