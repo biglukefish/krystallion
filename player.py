@@ -1,5 +1,5 @@
 """this module contains the player class, for generating our hero"""
-
+import pdb
 import pygame
 import earth
 import level
@@ -8,14 +8,15 @@ import constants
 class Player(pygame.sprite.Sprite):
 
 #attributes
-	change_x = 0
-	change_y = 0
-	can_jump = 0  # <--- limit of 2 jumps
+	change_x = 0.0
+	change_y = 0.0
+	can_jump = True
 	facing = 'right'
 	running = False
+	collision_side = ''
 	RUNNING_SPEED = 4
-	GRAVITY_CONSTANT = 0.15
-	JUMP_VELOCITY = 4
+	JUMP_VELOCITY = 15
+	test_rect = pygame.Rect(0, 0, 0, 0)
 
 
 #methods
@@ -23,103 +24,163 @@ class Player(pygame.sprite.Sprite):
 
 		super(Player, self).__init__()  #call to parent constructor
 
+		# self.image = pygame.image.load('tiny_krystal.png')
 		self.image = pygame.image.load('tiny_krystal.png')
+		self.image.set_colorkey(constants.BLACK)
 		self.rect = self.image.get_rect()
+		self.hitbox = pygame.Rect(0, 0, 40, 60)
 
 	
-	def move_left(self, platform_sprite_list):
-		
-		self.change_x -= self.RUNNING_SPEED		
+	def move_left(self):
+
+		self.change_x -= self.RUNNING_SPEED
 			
 
-
-	def move_right(self, platform_sprite_list):
+	def move_right(self):
 
 		self.change_x += self.RUNNING_SPEED
-
-		
 
 
 	def stop(self):
 		self.change_x = 0
 
 
-	def jump(self):
-		if self.can_jump < 2:
-			self.change_y -= self.JUMP_VELOCITY
-			self.can_jump += 1
+	def jump(self, platform_sprite_list):
 
+		self.change_y -= self.JUMP_VELOCITY
+		print 'change_y after jump= ' + str(self.change_y)
+		
 
-	def calc_gravity(self):
+	def apply_gravity(self):
 		#simulate gravity by making player fall
-		self.change_y += self.GRAVITY_CONSTANT
+
+		if self.change_y < 100:
+			self.change_y += constants.GRAVITY_CONSTANT
+		
 
 
-	def update(self, platform_sprite_list):
+	def update(self, platform_sprite_list, last_move):
 
+		
 		#add in the effects of gravity
-		self.calc_gravity()
-		
-		
-		if self.change_x < 0:
-			#collision detection to the left
-			self.rect.x -= 2
-			if len(pygame.sprite.spritecollide(self, platform_sprite_list, False)) > 0:
-				self.change_x = 0
-			self.rect.x += 2
+		self.apply_gravity()
+		print 'after first applying gravity, change y= ' + str(self.change_y)
 
-			if self.rect.x < 5:
-				self.change_x = 0
+		
+		print "change y before update= " + str(self.change_y)
+		print "bottom of rect before update= " + str(self.rect.bottom)
+
+
+		collision_side = self.test_collision_side(platform_sprite_list)
+		print collision_side
+
+		if collision_side == 'none':
+			self.rect.x += self.change_x
+			self.rect.y += self.change_y
+		else:
+			self.apply_collision(platform_sprite_list, collision_side)
+
+
+
+		# make sure player doesn't fall out of screen
+		if self.rect.bottom >= constants.DISPLAY_HEIGHT:
+			self.rect.bottom = constants.DISPLAY_HEIGHT
+			self.change_y = 0
+
+
+
+	def test_collision_side(self, platform_sprite_list):
+	
+
+		self.test_rect = self.rect.copy()
+		self.test_rect.x += self.change_x
+		self.test_rect.y += self.change_y
+		# creates a list of each sprite's rect
+		sprite_rect_list = []
+		for sprite in platform_sprite_list:
+			sprite_rect_list.append(sprite.rect)
+		self.hit = self.test_rect.collidelist(sprite_rect_list)
+		collided_platform = sprite_rect_list[self.hit]
+
+		
+
+		if self.hit == -1:
+				return 'none'
+
+
+		if self.hit != -1:
+			print 'self.hit != -1'
+
+
+			# Check for vertical collision
+			
+			if (self.rect.bottom + self.change_y > collided_platform.top 
+				and self.change_y > 0):
+				return 'bottom collision'
+
+			elif (self.rect.top + self.change_y < collided_platform.bottom 
+				and self.change_y < 0):
+				return 'top collision'
+
+
+			# Check for horizontal collision
+			elif (self.rect.left + self.change_x < collided_platform.right 
+				and self.rect.right + self.change_x > collided_platform.left
+				and self.change_x < 0):
+				return 'left collision'
+
+				
+			elif (self.rect.right + self.change_x > collided_platform.left 
+				and self.rect.left + self.change_x < collided_platform.right 
+				and self.change_x > 0):
+				return 'right collision'
+
+				print('right collided with platform')
+
+				self.rect.right = collided_platform.left
+
+			else:
+				return 'something is fucked up'
+
+
+	def apply_collision(self, platform_sprite_list, collision_side):
+
+		self.test_rect = self.rect.copy()
+		self.test_rect.x += self.change_x
+		self.test_rect.y += self.change_y
+		# creates a list of each sprite's rect
+		sprite_rect_list = []
+		for sprite in platform_sprite_list:
+			sprite_rect_list.append(sprite.rect)
+		self.hit = self.test_rect.collidelist(sprite_rect_list)
+		collided_platform = sprite_rect_list[self.hit]
+
+		
+
+		if self.hit == -1:
+				return 'none'
+
+
+		if self.hit != -1:
+			print 'self.hit != -1'
+
+		
+		if collision_side == 'top':
+			self.rect.bottom = collided_platform.top
+		elif collision_side == 'bottom':
+			self.rect.top = collided_platform.bottom
+		elif collision_side == 'left':
+			self.rect.left = collided_platform.right
+		elif collision_side == 'right':
+			self.rect.right = collided_platform.left
+
+
 
 			
-		if self.change_x > 0:
-			#collision detection to the right
-			self.rect.x += 2
-			if len(pygame.sprite.spritecollide(self, platform_sprite_list, False)) > 0:
-				self.change_x = 0
-			self.rect.x -= 2
-
-			# limit player from walking off the screen
-			if self.rect.x > 150:
-				self.change_x = 0
 
 
 
-		#update the position
-		self.rect.x += self.change_x
-		self.rect.y += self.change_y
 
-
-
-		#	drop the player down 2 pixels and if he hits something, stop from
-		#	falling (i.e. stop the effect of gravity)
-		self.rect.y += 2
-		if len(pygame.sprite.spritecollide(self, platform_sprite_list, False)) > 0:
-
-			#  In this case, player has collided with something so we need to reset her location.
-			#  We take the first sprite collided with, and reset position in relation to that sprite.
-			collided_object = pygame.sprite.spritecollide(self, platform_sprite_list, False)
-			self.rect.y = collided_object[0].rect.y - constants.HERO_SIZE[1]
-			self.change_y = 0
-			if self.can_jump == 1:
-				self.can_jump = 2
-			elif self.can_jump == 2:
-				self.can_jump = 0
-		else:		
-			self.rect.y -= 2
-
-		#   do the same for ceiling
-		self.rect.y -= 2
-		if len(pygame.sprite.spritecollide(self, platform_sprite_list, False)) > 0:
-
-			#  In this case, player has collided with something so we need to reset her location.
-			#  We take the first sprite collided with, and reset position in relation to that sprite.
-			collided_object = pygame.sprite.spritecollide(self, platform_sprite_list, False)
-			self.rect.y = collided_object[0].rect.y + collided_object[0].rect.height
-			self.change_y = 0
-		self.rect.y += 2
-
-		
 
 		
 
