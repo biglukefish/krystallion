@@ -15,7 +15,7 @@ class Level():
 		for i in range(len(platform_locations)):
 
 			#pass in width, height
-			platform = Earth((platform_locations[i][0], platform_locations[i][1]))
+			platform = Earth()
 
 			#pass in x y location
 			platform.rect.x = platform_locations[i][2]
