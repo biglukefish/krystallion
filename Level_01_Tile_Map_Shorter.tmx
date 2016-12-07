@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="118" height="7" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="Ground" tilewidth="64" tileheight="64">
+  <image source="spritesheet_ground_64_px_tiles.png" width="512" height="1024"/>
+ </tileset>
+ <tileset firstgid="129" name="Sky" tilewidth="64" tileheight="64">
+  <image source="bg.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="145" name="cloud1" tilewidth="190" tileheight="127">
+  <image source="cloud1.png" width="190" height="127"/>
+ </tileset>
+ <tileset firstgid="146" name="WingyDings" tilewidth="64" tileheight="64">
+  <image source="spritesheet_wingdings.png" width="512" height="1024"/>
+ </tileset>
+ <layer name="Sky" width="118" height="7">
+  <data encoding="base64" compression="zlib">
+   eJzt1bkNgEAQBMFNHY7/O3xCIElaAhthYJxGY5TRAexOiohkcibMWDC6ZXpDxo7VLdN13HfboHLLdIceA1q3TH/51+ejpP1wv/cRZeyB+9++AClEufA=
+  </data>
+ </layer>
+ <layer name="Clouds" width="118" height="7">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAMCXAQzoAAE=
+  </data>
+ </layer>
+ <layer name="Ground" width="118" height="7">
+  <data encoding="base64" compression="zlib">
+   eJxrZmBgaB7FQxYz4cCE9OkMoJsdkdihQOyLhF1JMAdZrwqJemmB2ZAwNnkXILaBYhMy45aUuDQGYm0KMTFxiQwoDUP09KDCQHq6IIT5gZgdiuvINANXHBOLSc2v1MQqdLYPPU5JjVdkQE93UyNu8alDz7ek5DtS49URjc+AR47cOIXFKwyT44c0II4D4jAqxAMbA+Eymdy4hfH/Ehkv+MJkLxQ3I9HExispmJWRvDglNV6x+YEY98D0XcETPpRiZHPOAfEcNHkQEARiTiIwcpgQo54czMiAGxDrTlLt42aEYEE0PhcONjImx034/AgCtUCciybmB6V1iAwLAIRfR0M=
+  </data>
+ </layer>
+ <objectgroup name="Terrain" width="118" height="7" visible="0">
+  <object x="704" y="256" width="192" height="128"/>
+  <object x="704" y="128" width="1088" height="64"/>
+  <object x="1728" y="192" width="64" height="192"/>
+  <object x="2688" y="64" width="320" height="64"/>
+  <object x="3392" y="320" width="640" height="64"/>
+  <object x="3456" y="256" width="576" height="64"/>
+  <object x="3520" y="192" width="512" height="64"/>
+  <object x="3584" y="128" width="448" height="64"/>
+  <object x="3648" y="64" width="320" height="64"/>
+  <object x="6464" y="64" width="256" height="64"/>
+  <object x="7232" y="64" width="128" height="64"/>
+  <object x="7296" y="128" width="128" height="64"/>
+  <object x="7360" y="192" width="128" height="64"/>
+  <object x="7424" y="256" width="128" height="64"/>
+  <object x="5184" y="128" width="256" height="32"/>
+  <object x="5952" y="64" width="192" height="32"/>
+  <object x="6080" y="256" width="256" height="32"/>
+  <object x="320" y="128" width="64" height="64"/>
+  <object x="512" y="64" width="64" height="64"/>
+  <object x="448" y="256" width="64" height="64"/>
+  <object x="64" y="384" width="2304" height="64"/>
+  <object x="2176" y="256" width="64" height="32"/>
+  <object x="2304" y="128" width="64" height="32"/>
+  <object x="2496" y="64" width="64" height="32"/>
+  <object x="2624" y="256" width="64" height="32"/>
+  <object x="2816" y="384" width="1344" height="64"/>
+  <object x="4288" y="384" width="128" height="64"/>
+  <object x="4544" y="384" width="64" height="64"/>
+  <object x="4736" y="384" width="64" height="64"/>
+  <object x="4864" y="256" width="192" height="64"/>
+  <object x="6272" y="128" width="64" height="32"/>
+  <object x="6784" y="384" width="64" height="64"/>
+  <object x="6464" y="384" width="128" height="32"/>
+  <object x="7168" y="-64" width="384" height="128"/>
+  <object x="7040" y="384" width="512" height="64"/>
+  <object x="6912" y="384" width="64" height="64"/>
+  <object x="5120" y="384" width="896" height="64"/>
+ </objectgroup>
+ <objectgroup name="Trampolines" width="118" height="7" visible="0"/>
+</map>

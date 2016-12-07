@@ -3,17 +3,15 @@ game scrolls.  It is really just an offset to apply before rendering'''
 
 import pygame
 from constants import *
-import player
 
 class Camera(object):
 
-	def __init__(self, level_width, level_height):
+	def __init__(self, level_rect):
 		# target is the center of a rect object representing part of
 		# level that should be drawn
 		self.shifted_camera = pygame.Rect(0, 0, DISPLAY_WIDTH,
 								DISPLAY_HEIGHT)
-		self.level_width = level_width
-		self.level_height = level_height
+		self.level_rect = level_rect
 
 	def apply(self, target_character):
 		'''receives character rectangle, returns an (x, y) offset tuple'''
@@ -25,12 +23,12 @@ class Camera(object):
 		# make sure the camera doesn't scroll off the map
 		if self.shifted_camera.left < 0:
 			self.shifted_camera.left = 0
-		if self.shifted_camera.right > self.level_width:
-			self.shifted_camera.right = self.level_width
+		if self.shifted_camera.right > self.level_rect.right:
+			self.shifted_camera.right = self.level_rect.right
 		if self.shifted_camera.top < 0:
 			self.shifted_camera.top = 0
-		if self.shifted_camera.bottom > self.level_height:
-			self.shifted_camera.bottom = self.level_height
+		if self.shifted_camera.bottom > self.level_rect.bottom:
+			self.shifted_camera.bottom = self.level_rect.bottom
 
 		#return offset tuple
 		return (-1 * self.shifted_camera.x, -1 * self.shifted_camera.y)

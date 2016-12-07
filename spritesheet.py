@@ -11,7 +11,7 @@ class SpriteSheet(object):
 		#load up the sprite sheet
 		self.sprite_sheet = pygame.image.load(file_name)
 
-	def get_image(self, x, y, width, height):
+	def get_image(self, (x, y, width, height)):
 		#pull single image out of spritesheet
 
 		#create a blank image the same size as the image needed

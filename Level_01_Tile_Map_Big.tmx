@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="115" height="10" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="Sky" tilewidth="128" tileheight="128">
+  <image source="../../../VideoGameAssets/Kenney Game Assets (version 40)/Art/Background elements (110 assets)/PNG/Flat/sky.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="65" name="Ground" tilewidth="128" tileheight="64">
+  <image source="../../../VideoGameAssets/Kenney Game Assets (version 40)/Art/Platformer pack redux (360 assets)/Spritesheets/spritesheet_ground.png" width="1024" height="2048"/>
+ </tileset>
+ <objectgroup name="Platforms" width="115" height="10"/>
+ <layer name="Sky" width="115" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qXXYyi4aqqqqqq+e3lUBH8=
+  </data>
+ </layer>
+ <layer name="Ground" width="115" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztxTENADAIADAsEvx72TEFcBHSPq34qjkAAABwUw5nnwdrmAR9
+  </data>
+ </layer>
+</map>
