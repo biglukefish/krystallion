@@ -11,9 +11,10 @@ import game
 class Krystal(pygame.sprite.Sprite):
 	dx = 0
 	dy = 0
-	can_jump = True
+	moving_horizontally = False
+	shooting = False
+	action = 'idle'  # options are: running, jumping, sliding, shooting, stabbing, or idle
 	facing = 'right'
-	running = False
 	collision_side = ''
 	RUNNING_SPEED = constants.HERO_RUNNING_SPEED
 	JUMP_VELOCITY = constants.HERO_JUMP_VELOCITY
@@ -26,39 +27,45 @@ class Krystal(pygame.sprite.Sprite):
 
 		self.game = game
 
+
 		# frames for loading images of character in diff positions
-		self.img_walk_l = []
-		self.img_walk_r = []
-		self.img_stand_l = []
-		self.img_stand_r = []
-		self.img_fly_l = []
-		self.img_fly_r = []
-		self.img_fall_l = []
-		self.img_fall_r = []
+		# self.img_walk_l = []
+		# self.img_walk_r = []
+		# self.img_stand_l = []
+		# self.img_stand_r = []
+		# self.img_fly_l = []
+		# self.img_fly_r = []
+		# self.img_fall_l = []
+		# self.img_fall_r = []
 
 		self.hitlist_indices = []
 		self.is_hit = False
 
-		# set spritesheet image references
-		for element in constants.KRYSTAL_WALKING:
-			image = assets.krystal_ssheet.get_image(element)
-			self.img_walk_r.append(image)
-			self.img_walk_l.append(pygame.transform.flip(image, True, False))
-		for element in constants.KRYSTAL_STANDING:
-			image = assets.krystal_ssheet.get_image(element)
-			self.img_stand_r.append(image)
-			self.img_stand_l.append(pygame.transform.flip(image, True, False))
-		for element in constants.KRYSTAL_FLYING:
-			image = assets.krystal_ssheet.get_image(element)
-			self.img_fly_r.append(image)
-			self.img_fly_l.append(pygame.transform.flip(image, True, False))
-		for element in constants.KRYSTAL_FALLING:
-			image = assets.krystal_ssheet.get_image(element)
-			self.img_fall_r.append(image)
-			self.img_fall_l.append(pygame.transform.flip(image, True, False))
+		# # set spritesheet image references
+		# for element in constants.KRYSTAL_WALKING:
+		# 	image = assets.krystal_ssheet.get_image(element)
+		# 	self.img_walk_r.append(image)
+		# 	self.img_walk_l.append(pygame.transform.flip(image, True, False))
+		# for element in constants.KRYSTAL_STANDING:
+		# 	image = assets.krystal_ssheet.get_image(element)
+		# 	self.img_stand_r.append(image)
+		# 	self.img_stand_l.append(pygame.transform.flip(image, True, False))
+		# for element in constants.KRYSTAL_FLYING:
+		# 	image = assets.krystal_ssheet.get_image(element)
+		# 	self.img_fly_r.append(image)
+		# 	self.img_fly_l.append(pygame.transform.flip(image, True, False))
+		# for element in constants.KRYSTAL_FALLING:
+		# 	image = assets.krystal_ssheet.get_image(element)
+		# 	self.img_fall_r.append(image)
+		# 	self.img_fall_l.append(pygame.transform.flip(image, True, False))
 
-		# Set the image the player starts with
-		self.image = self.img_walk_r[0]
+		# # Set the image the player starts with
+		# self.image = self.img_walk_r[0]
+
+		#-----------------ANIMATION LOGIC-----
+
+
+		#-----------------END ANIMATION LOGIC
 
 		# 'Rect' is a ref to the sprite object.  'Char_rect' is an
 		# independent, smaller rectangle to use for collision calcs and repositioning
@@ -68,13 +75,12 @@ class Krystal(pygame.sprite.Sprite):
 		self.char_rect = pygame.Rect(0, 0, self.rect.width / 3, self.rect.height)
 		self.char_rect.x, self.char_rect.y = constants.STARTING_POSITION_X, constants.STARTING_POSITION_Y
 
-	def move_horizontal(self, direction):
-		if direction == 'right':
-			self.dx += self.RUNNING_SPEED
-		elif direction == 'left':
-			self.dx -= self.RUNNING_SPEED
-		else:
-			self.dx = 0
+	def move_horizontal(self):
+		if krystal.moving_horizontally() == True:
+			if krystal.facing == 'right':
+				self.dx += self.RUNNING_SPEED
+			elif krystal.facing == 'left':
+				self.dx -= self.RUNNING_SPEED
 
 
 	def jump(self):
@@ -101,6 +107,8 @@ class Krystal(pygame.sprite.Sprite):
 
 		self.apply_gravity()
 		self.apply_collision()
+		self.set_action_state()
+		self.animate()
 
 		#temp code to catch character if she falls off screen
 		if self.char_rect.bottom > constants.DISPLAY_HEIGHT:
@@ -108,33 +116,33 @@ class Krystal(pygame.sprite.Sprite):
 
 		# Update what image of Krystal is used, based on the direction
 		# she is facing and what she is doing.
-		pos = self.char_rect.x
-		if self.facing == 'right' and self.dx != 0:
-			frame = (pos // 30) % len(self.img_walk_r)
-			self.image = self.img_walk_r[frame]
-		if self.facing == 'left' and self.dx != 0:
-			frame = (pos // 30) % len(self.img_walk_l)
-			self.image = self.img_walk_l[frame]
-
-		pos = self.char_rect.x
-		if self.dx == 0 and self.dy == 0:
-			if self.facing == 'right':
-				frame = (pos // 30) % len(self.img_stand_r)
-				self.image = self.img_stand_r[frame]
-			if self.facing == 'left':
-				frame = (pos // 30) % len(self.img_stand_l)
-				self.image = self.img_stand_l[frame]
-
-		pos = self.char_rect.x
-		if self.dy > 0:
-			if self.facing == 'right':
-				frame = (pos // 30) % len(self.img_fly_r)
-				self.image = self.img_fly_r[frame]
-			if self.facing == 'left':
-				frame = (pos // 30) % len(self.img_fly_l)
-				self.image = self.img_fly_l[frame]
-
-		self.move_horizontal('stopped')
+		# pos = self.char_rect.x
+		# if self.facing == 'right' and self.dx != 0:
+		# 	frame = (pos // 30) % len(self.img_walk_r)
+		# 	self.image = self.img_walk_r[frame]
+		# if self.facing == 'left' and self.dx != 0:
+		# 	frame = (pos // 30) % len(self.img_walk_l)
+		# 	self.image = self.img_walk_l[frame]
+		#
+		# pos = self.char_rect.x
+		# if self.dx == 0 and self.dy == 0:
+		# 	if self.facing == 'right':
+		# 		frame = (pos // 30) % len(self.img_stand_r)
+		# 		self.image = self.img_stand_r[frame]
+		# 	if self.facing == 'left':
+		# 		frame = (pos // 30) % len(self.img_stand_l)
+		# 		self.image = self.img_stand_l[frame]
+		#
+		# pos = self.char_rect.x
+		# if self.dy > 0:
+		# 	if self.facing == 'right':
+		# 		frame = (pos // 30) % len(self.img_fly_r)
+		# 		self.image = self.img_fly_r[frame]
+		# 	if self.facing == 'left':
+		# 		frame = (pos // 30) % len(self.img_fly_l)
+		# 		self.image = self.img_fly_l[frame]
+		#
+		# self.move_horizontal('stopped')
 
 	def apply_collision(self):
 		'''Update position of char based on collision
@@ -232,6 +240,22 @@ class Krystal(pygame.sprite.Sprite):
 		else:
 			return True
 
+	def set_action_state():
+		'''determines the value of self.action (a string) and returns it'''
+		if self.on_ground == False:
+			self.action = 'jumping'
+		elif self.on_ground == True and self.moving_horizontally == True:
+			self.action = 'running'
+		elif self.on_ground == True and self.moving_horizontally == False:
+			self.action = 'idle'
+
+		if self.shooting == True:
+			self.action = 'shooting'
+
+
+
+	def animate():
+		pass
 
 
 

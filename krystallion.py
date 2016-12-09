@@ -65,12 +65,10 @@ def main():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LEFT:
 					krystal.facing = 'left'
-					direction = 'left'
-					krystal.running = True
+					krystal.moving_horizontally = True
 				if event.key == pygame.K_RIGHT:
 					krystal.facing = 'right'
-					direction = 'right'
-					krystal.running = True
+					krystal.moving_horizontally = True
 				if event.key == pygame.K_UP:
 					krystal.jump()
 				if event.key == pygame.K_SPACE:
@@ -85,14 +83,14 @@ def main():
 
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_LEFT:
-					direction = 'stopped'
-					krystal.running = False
+					krystal.facing = 'left'
+					krystal.moving_horizontally = False
 				if event.key == pygame.K_RIGHT:
-					direction = 'stopped'
-					krystal.running = False
+					krystal.facing = 'right'
+					krystal.moving_horizontally = False
 
 		#-----------game logic updates
-		krystal.move_horizontal(direction)
+		krystal.move_horizontal()
 		krystal.update()
 		bullet_list.update()
 		current_game.level_1.enemy_sprites.update()
