@@ -17,7 +17,7 @@ import game
 pygame.init()
 pygame.mixer.init()
 current_game = game.Game()
-screen = pygame.display.set_mode(constants.DISPLAY_SIZE)
+screen = pygame.display.set_mode(constants.DISPLAY_SIZE, pygame.FULLSCREEN)
 pygame.display.set_caption("Krystallion")
 background_image = pygame.image.load(current_game.level_1.image).convert()
 level_rect = background_image.get_rect()
@@ -63,6 +63,8 @@ def main():
 
 			#process user input for playing the game	
 			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					done = True
 				if event.key == pygame.K_LEFT:
 					krystal.facing = 'left'
 					krystal.moving_horizontally = True
@@ -74,12 +76,10 @@ def main():
 				if event.key == pygame.K_SPACE:
 					shot = Bullet(krystal.char_rect.x, krystal.char_rect.y,
 									krystal.facing, krystal.char_rect.x)
+					krystal.shooting = True
 					shooting_sound.play()
 					bullet_list.add(shot)
-				if event.key == pygame.K_w:
-					pygame.display.set_mode(constants.DISPLAY_SIZE)
-				if event.key == pygame.K_f:
-					pygame.display.set_mode(constants.DISPLAY_SIZE, pygame.FULLSCREEN)
+
 
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_LEFT:
@@ -120,10 +120,29 @@ def main():
 		screen.blit(background_image, offset_tuple)
 
 		#draw krystal
+
 		krystal.rect.center = krystal.char_rect.center
-		krystal.rect.x = krystal.char_rect.x - 18
-		screen.blit(krystal.image, (krystal.rect.x + offset_tuple[0],
+		krystal.rect.x = krystal.char_rect.x - 15
+		krystal.rect.y = krystal.char_rect.y - 22
+
+		# adjustment needed to compensate for wide sprite due to gun
+		if krystal.shooting == True and krystal.facing == 'left':
+			screen.blit(krystal.image, (krystal.rect.x + offset_tuple[0] - krystal.shot_frames_offset[krystal.shot_frame - 1],
+										krystal.rect.y + offset_tuple[1]))
+			if krystal.shot_frame == 2:
+				krystal.shooting = False
+				krystal.shot_frame = 0
+		else:
+			screen.blit(krystal.image, (krystal.rect.x + offset_tuple[0],
 									krystal.rect.y + offset_tuple[1]))
+			if krystal.shot_frame == 2:
+				krystal.shooting = False
+				krystal.shot_frame = 0
+
+		# UNCOMMENT FOR SEEING ACTUAL CHARACTER RECTANGLE LOCATION
+		pygame.draw.rect(screen, constants.BLACK, (krystal.rect.x + offset_tuple[0],
+										krystal.rect.y + offset_tuple[1], krystal.rect.width, krystal.rect.height))
+
 		current_game.level_1.enemy_sprites.update()
 
 		#draw enemy
@@ -142,7 +161,7 @@ def main():
 		if krystal.is_hit == True:
 			texts('you fucking got hit', (constants.DISPLAY_WIDTH / 2, constants.DISPLAY_HEIGHT / 2))
 		# texts('y=', krystal.rect.y, (0, 20))
-		# texts("fps= ", str(round(clock.get_fps())), (0, 40))
+		texts("fps= " + str(round(clock.get_fps())), (0, 40))
 		# texts('dx=', krystal.dx, (constants.DISPLAY_WIDTH - 80, 0))
 		# texts('dy=', krystal.dy, (constants.DISPLAY_WIDTH - 80, 20))
 		# texts('collide=', krystal.collision_status, (constants.DISPLAY_WIDTH - 200, 40))

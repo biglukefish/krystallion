@@ -5,7 +5,7 @@ import pygame
 import constants
 import spritesheet
 import assets
-import game
+
 
 
 class Krystal(pygame.sprite.Sprite):
@@ -13,81 +13,58 @@ class Krystal(pygame.sprite.Sprite):
 	dy = 0
 	moving_horizontally = False
 	shooting = False
-	action = 'idle'  # options are: running, jumping, sliding, shooting, stabbing, or idle
+	action = 'idle'  # options are: run, jump, slide, shoot, stab, or idle
 	facing = 'right'
 	collision_side = ''
-	RUNNING_SPEED = constants.HERO_RUNNING_SPEED
 	JUMP_VELOCITY = constants.HERO_JUMP_VELOCITY
 	on_ground = True
 	collision_status = 'none'
+	dead_frame = 0
+	shot_frame = 0
+	idle_frame = 0
+	jump_frame = 0
+	run_frame = 0
+	pacer = 0
+
+	# frames for animation
+	dead_frames = constants.KRYSTAL_IMAGES[0:9]
+	idle_frames = constants.KRYSTAL_IMAGES[9:16]
+	jump_frames = constants.KRYSTAL_IMAGES[16:26]
+	melee_frames = constants.KRYSTAL_IMAGES[26:33]
+	run_frames = constants.KRYSTAL_IMAGES[33:41]
+	shot_frames = constants.KRYSTAL_IMAGES[41:44]
+	slide_frames = constants.KRYSTAL_IMAGES[44:49]
+	shot_frames_offset = constants.KRYSTAL_OFFSETS[41:44]
+
 
 
 	def __init__(self, game):
 		super(Krystal, self).__init__()
 
 		self.game = game
-
-
-		# frames for loading images of character in diff positions
-		# self.img_walk_l = []
-		# self.img_walk_r = []
-		# self.img_stand_l = []
-		# self.img_stand_r = []
-		# self.img_fly_l = []
-		# self.img_fly_r = []
-		# self.img_fall_l = []
-		# self.img_fall_r = []
-
 		self.hitlist_indices = []
 		self.is_hit = False
 
-		# # set spritesheet image references
-		# for element in constants.KRYSTAL_WALKING:
-		# 	image = assets.krystal_ssheet.get_image(element)
-		# 	self.img_walk_r.append(image)
-		# 	self.img_walk_l.append(pygame.transform.flip(image, True, False))
-		# for element in constants.KRYSTAL_STANDING:
-		# 	image = assets.krystal_ssheet.get_image(element)
-		# 	self.img_stand_r.append(image)
-		# 	self.img_stand_l.append(pygame.transform.flip(image, True, False))
-		# for element in constants.KRYSTAL_FLYING:
-		# 	image = assets.krystal_ssheet.get_image(element)
-		# 	self.img_fly_r.append(image)
-		# 	self.img_fly_l.append(pygame.transform.flip(image, True, False))
-		# for element in constants.KRYSTAL_FALLING:
-		# 	image = assets.krystal_ssheet.get_image(element)
-		# 	self.img_fall_r.append(image)
-		# 	self.img_fall_l.append(pygame.transform.flip(image, True, False))
 
-		# # Set the image the player starts with
-		# self.image = self.img_walk_r[0]
-
-		#-----------------ANIMATION LOGIC-----
-
-
-		#-----------------END ANIMATION LOGIC
-
-		# 'Rect' is a ref to the sprite object.  'Char_rect' is an
-		# independent, smaller rectangle to use for collision calcs and repositioning
-		# Krystal's character.  Immediately before blitting, 'rect' will be moved to where
-		# 'char_rect' is, so image can be pasted in the correct place.
+		self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[0])
 		self.rect = self.image.get_rect()
-		self.char_rect = pygame.Rect(0, 0, self.rect.width / 3, self.rect.height)
+		self.char_rect = pygame.Rect(0, 0, self.rect.width * 2 / 3, self.rect.height * 3 / 4)
 		self.char_rect.x, self.char_rect.y = constants.STARTING_POSITION_X, constants.STARTING_POSITION_Y
 
 	def move_horizontal(self):
-		if krystal.moving_horizontally() == True:
-			if krystal.facing == 'right':
-				self.dx += self.RUNNING_SPEED
-			elif krystal.facing == 'left':
-				self.dx -= self.RUNNING_SPEED
+		if self.moving_horizontally == True:
+			if self.facing == 'right':
+				self.dx += constants.HERO_RUNNING_SPEED
+			elif self.facing == 'left':
+				self.dx -= constants.HERO_RUNNING_SPEED
 
 
 	def jump(self):
 		'''applies jump if char is standing on ground'''
 		if self.on_ground == True:
-			self.dy -= self.JUMP_VELOCITY
+			self.dy -= constants.HERO_JUMP_VELOCITY
 			self.on_ground = False
+			self.action = 'jump'
 
 	def apply_gravity(self):
 		'''simulate gravity by making char fall'''
@@ -107,42 +84,15 @@ class Krystal(pygame.sprite.Sprite):
 
 		self.apply_gravity()
 		self.apply_collision()
-		self.set_action_state()
-		self.animate()
+		self.update_image()
+		self.pacer += 1
 
+		self.dx = 0
 		#temp code to catch character if she falls off screen
 		if self.char_rect.bottom > constants.DISPLAY_HEIGHT:
 			self.char_rect.bottom = constants.DISPLAY_HEIGHT - 5
 
-		# Update what image of Krystal is used, based on the direction
-		# she is facing and what she is doing.
-		# pos = self.char_rect.x
-		# if self.facing == 'right' and self.dx != 0:
-		# 	frame = (pos // 30) % len(self.img_walk_r)
-		# 	self.image = self.img_walk_r[frame]
-		# if self.facing == 'left' and self.dx != 0:
-		# 	frame = (pos // 30) % len(self.img_walk_l)
-		# 	self.image = self.img_walk_l[frame]
-		#
-		# pos = self.char_rect.x
-		# if self.dx == 0 and self.dy == 0:
-		# 	if self.facing == 'right':
-		# 		frame = (pos // 30) % len(self.img_stand_r)
-		# 		self.image = self.img_stand_r[frame]
-		# 	if self.facing == 'left':
-		# 		frame = (pos // 30) % len(self.img_stand_l)
-		# 		self.image = self.img_stand_l[frame]
-		#
-		# pos = self.char_rect.x
-		# if self.dy > 0:
-		# 	if self.facing == 'right':
-		# 		frame = (pos // 30) % len(self.img_fly_r)
-		# 		self.image = self.img_fly_r[frame]
-		# 	if self.facing == 'left':
-		# 		frame = (pos // 30) % len(self.img_fly_l)
-		# 		self.image = self.img_fly_l[frame]
-		#
-		# self.move_horizontal('stopped')
+
 
 	def apply_collision(self):
 		'''Update position of char based on collision
@@ -240,22 +190,132 @@ class Krystal(pygame.sprite.Sprite):
 		else:
 			return True
 
-	def set_action_state():
-		'''determines the value of self.action (a string) and returns it'''
-		if self.on_ground == False:
-			self.action = 'jumping'
-		elif self.on_ground == True and self.moving_horizontally == True:
-			self.action = 'running'
-		elif self.on_ground == True and self.moving_horizontally == False:
-			self.action = 'idle'
-
+	def update_image(self):
+		'''determines the value of self.action'''
 		if self.shooting == True:
-			self.action = 'shooting'
+			self.animate_shot()
+		else:
+			self.shot_frame = 0
+			if self.on_ground == False:
+				self.action = 'jump'
+				self.animate_jump()
+			elif self.on_ground == True and self.moving_horizontally == True:
+				self.action = 'run'
+				self.animate_run()
+			elif self.on_ground == True and self.moving_horizontally == False:
+				self.action = 'idle'
+				self.animate_idle()
+
+
+	def animate_shot(self):
+			if self.action != 'shoot':
+				self.shot_frame = 0
+				self.action = 'shoot'
+				if self.facing == 'right':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+				elif self.facing == 'left':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+					self.image = pygame.transform.flip(self.image, True, False)
+					self.shot_frame += 1
+			elif self.action == 'shoot' and self.shot_frame < 2:
+				if self.facing == 'right':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+				elif self.facing == 'left':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+					self.image = pygame.transform.flip(self.image, True, False)
+				self.shot_frame += 1
+			elif self.action == 'shoot' and self.shot_frame == 2:
+				if self.facing == 'right':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+				elif self.facing == 'left':
+					self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.shot_frames[self.shot_frame])
+					self.image = pygame.transform.flip(self.image, True, False)
 
 
 
-	def animate():
-		pass
+	def animate_jump(self):
+		if self.action == 'jump' and self.jump_frame < 9:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 3 == 0:
+				self.jump_frame += 1
+
+		elif self.action == 'jump' and self.jump_frame == 9:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			self.jump_frame = 0
+
+		elif self.action != 'jump':
+			self.jump_frame = 0
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.jump_frames[self.jump_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 3 == 0:
+				self.jump_frame += 1
+
+	def animate_idle(self):
+		if self.action == 'idle' and self.idle_frame < 6:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 4 == 0:
+				self.idle_frame += 1
+
+		elif self.action == 'idle' and self.idle_frame == 6:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			self.idle_frame = 0
+
+		elif self.action != 'idle':
+			self.idle_frame = 0
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.idle_frames[self.idle_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 4 == 0:
+				self.idle_frame += 1
+
+	def animate_run(self):
+		if self.action == 'run' and self.run_frame < 7:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 4 == 0:
+				self.run_frame += 1
+
+		elif self.action == 'run' and self.run_frame == 7:
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			self.run_frame = 0
+
+		elif self.action != 'run':
+			self.run_frame = 0
+			if self.facing == 'right':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+			elif self.facing == 'left':
+				self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.run_frames[self.run_frame])
+				self.image = pygame.transform.flip(self.image, True, False)
+			if self.pacer % 4 == 0:
+				self.run_frame += 1
 
 
 
