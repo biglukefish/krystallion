@@ -23,3 +23,21 @@ class SpriteSheet(object):
 		image.set_colorkey(constants.BLACK)
 
 		return image
+
+	# def get_image_bottom_aligned(self, (x, y, width, height)):
+	# 	'''
+	# 	pull single image out of spritesheet and blit it, bottom
+	# 	aligned
+	# 	:return'''
+	#
+	# 	# create a blank image the same size as the image needed
+	# 	image = pygame.Surface([width, height], pygame.SRCALPHA)
+	#
+	# 	# copy the image from the spritesheet onto the new image
+	# 	image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
+	#
+	# 	image.set_colorkey(constants.BLACK)
+	#
+	# 	return image
+
+KRYSTAL_SPRITESHEET = SpriteSheet('assets/krystal_images/image_locations.png')

@@ -1,0 +1,354 @@
+{"frames": [
+
+{
+	"filename": "bee_dead (1).png",
+	"frame": {"x":1,"y":1,"w":62,"h":79},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":9,"w":62,"h":79},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_dead (2).png",
+	"frame": {"x":65,"y":1,"w":74,"h":90},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":4,"w":74,"h":90},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_dead (3).png",
+	"frame": {"x":141,"y":1,"w":87,"h":95},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":87,"h":95},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (1).png",
+	"frame": {"x":1,"y":98,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (2).png",
+	"frame": {"x":59,"y":98,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (3).png",
+	"frame": {"x":117,"y":98,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (4).png",
+	"frame": {"x":175,"y":98,"w":57,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":22,"y":14,"w":57,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (5).png",
+	"frame": {"x":1,"y":170,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (6).png",
+	"frame": {"x":59,"y":170,"w":57,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":22,"y":14,"w":57,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (7).png",
+	"frame": {"x":118,"y":170,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bee_fly (8).png",
+	"frame": {"x":176,"y":170,"w":56,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":23,"y":14,"w":56,"h":70},
+	"sourceSize": {"w":102,"h":96},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_dead (1).png",
+	"frame": {"x":1,"y":242,"w":59,"h":42},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":25,"w":59,"h":42},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_dead (2).png",
+	"frame": {"x":62,"y":242,"w":64,"h":37},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":30,"w":64,"h":37},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_dead (3).png",
+	"frame": {"x":128,"y":242,"w":68,"h":32},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":35,"w":68,"h":32},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_dead (4).png",
+	"frame": {"x":1,"y":286,"w":68,"h":29},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":38,"w":68,"h":29},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (1).png",
+	"frame": {"x":71,"y":286,"w":57,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":48},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (2).png",
+	"frame": {"x":130,"y":286,"w":57,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":48},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (3).png",
+	"frame": {"x":189,"y":286,"w":57,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":48},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (4).png",
+	"frame": {"x":1,"y":336,"w":57,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":48},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (5).png",
+	"frame": {"x":60,"y":336,"w":57,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":48},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (6).png",
+	"frame": {"x":119,"y":336,"w":57,"h":47},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":47},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (7).png",
+	"frame": {"x":178,"y":336,"w":57,"h":47},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":47},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shroom_walk (8).png",
+	"frame": {"x":1,"y":386,"w":57,"h":47},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":19,"w":57,"h":47},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (1).png",
+	"frame": {"x":60,"y":386,"w":71,"h":61},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":61},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (2).png",
+	"frame": {"x":133,"y":386,"w":71,"h":61},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":61},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (3).png",
+	"frame": {"x":1,"y":449,"w":71,"h":61},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":61},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (4).png",
+	"frame": {"x":74,"y":449,"w":71,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":60},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (5).png",
+	"frame": {"x":147,"y":449,"w":71,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":60},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (6).png",
+	"frame": {"x":1,"y":512,"w":71,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":60},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (7).png",
+	"frame": {"x":74,"y":512,"w":71,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":60},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "turtle_walk (8).png",
+	"frame": {"x":147,"y":512,"w":71,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":71,"h":60},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_dead (1).png",
+	"frame": {"x":1,"y":574,"w":60,"h":63},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":0,"w":60,"h":63},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_dead (2).png",
+	"frame": {"x":63,"y":574,"w":57,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":57,"h":64},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_dead (3).png",
+	"frame": {"x":122,"y":574,"w":54,"h":63},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":1,"w":54,"h":63},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_fly (1).png",
+	"frame": {"x":178,"y":574,"w":71,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":11,"w":71,"h":44},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_fly (2).png",
+	"frame": {"x":1,"y":640,"w":68,"h":47},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":26,"w":68,"h":47},
+	"sourceSize": {"w":71,"h":73},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_fly (3).png",
+	"frame": {"x":71,"y":640,"w":71,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":11,"w":71,"h":44},
+	"sourceSize": {"w":71,"h":67},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "vulture_fly (4).png",
+	"frame": {"x":144,"y":640,"w":68,"h":58},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":68,"h":58},
+	"sourceSize": {"w":71,"h":70},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "level_1_enemies_1.png",
+	"format": "RGBA8888",
+	"size": {"w":250,"h":699},
+	"scale": "0.6",
+	"smartupdate": "$TexturePacker:SmartUpdate:b7c74f2ad1382e29c987435a4cd65596:097d948251cd91f364e9a1870296b9e0:08b633d35d8ea5cd7ca160ea602e2870$"
+}
+}

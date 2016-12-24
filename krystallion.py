@@ -13,33 +13,28 @@ import constants
 from bullet import Bullet
 import game
 
+
 # initialize pygame and build screen
 pygame.init()
 pygame.mixer.init()
 current_game = game.Game()
-screen = pygame.display.set_mode(constants.DISPLAY_SIZE)
+screen = pygame.display.set_mode(constants.DISPLAY_SIZE, pygame.FULLSCREEN)
 pygame.display.set_caption("Krystallion")
 background_image = pygame.image.load(current_game.level_1.image).convert()
 level_rect = background_image.get_rect()
-laser = pygame.image.load('lasershot copy.png').convert()
-laser.set_colorkey(constants.WHITE)
-
+gunshot = pygame.image.load('assets/bullet (3).png').convert()
+gunshot.set_colorkey(constants.WHITE)
 
 
 clock = pygame.time.Clock()
 
 
-
 def main():
-	
-	#create heroine and plop her in the left of the screen
+
 	krystal = characters.Krystal(current_game)
-	krystal.char_rect.x = constants.STARTING_POSITION_X
-	krystal.char_rect.y = constants.STARTING_POSITION_Y
 	direction = '' # Can be 'left', 'right', or 'stopped'
 
 	#build camera
-
 	camera_shifter = camera.Camera(level_rect)
 
 	bullet_list = pygame.sprite.Group()
@@ -48,11 +43,12 @@ def main():
 	done = False
 
 	#load jams for pumping and other sounds
-	pygame.mixer.music.load('Retro Reggae.ogg')
+	pygame.mixer.music.load('assets/Retro Reggae.ogg')
 	pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
 	pygame.mixer.music.play(loops = -1)
-	shooting_sound = pygame.mixer.Sound('laser5.ogg')
-	bee_sound = pygame.mixer.Sound('Bee.wav')
+	shooting_sound = pygame.mixer.Sound('assets/gunshot.wav')
+	shooting_sound.set_volume(0.5)
+	bee_sound = pygame.mixer.Sound('assets/Bee.wav')
 
 
 	#---------main program loop
@@ -63,6 +59,8 @@ def main():
 
 			#process user input for playing the game	
 			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					done = True
 				if event.key == pygame.K_LEFT:
 					krystal.facing = 'left'
 					krystal.moving_horizontally = True
@@ -72,14 +70,11 @@ def main():
 				if event.key == pygame.K_UP:
 					krystal.jump()
 				if event.key == pygame.K_SPACE:
-					shot = Bullet(krystal.char_rect.x, krystal.char_rect.y,
-									krystal.facing, krystal.char_rect.x)
+					shot = Bullet(krystal.rect.x, krystal.rect.y,
+									krystal.facing, krystal.rect.x)
+					krystal.shooting = True
 					shooting_sound.play()
 					bullet_list.add(shot)
-				if event.key == pygame.K_w:
-					pygame.display.set_mode(constants.DISPLAY_SIZE)
-				if event.key == pygame.K_f:
-					pygame.display.set_mode(constants.DISPLAY_SIZE, pygame.FULLSCREEN)
 
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_LEFT:
@@ -93,60 +88,112 @@ def main():
 		krystal.move_horizontal()
 		krystal.update()
 		bullet_list.update()
-		current_game.level_1.enemy_sprites.update()
+		current_game.level_1.bee_sprites.update()
+		current_game.level_1.shroom_sprites.update()
+		current_game.level_1.vulture_sprites.update()
+		current_game.level_1.dead_sprites.update()
 
+
+		# Handle bullet hits
 		for bullet in bullet_list:
 			bee_hit_list = pygame.sprite.spritecollide(
-				bullet, current_game.level_1.enemy_sprites, False)
+				bullet, current_game.level_1.bee_sprites, True)
 			for bee in bee_hit_list:
 				bee.alive = False
+				current_game.level_1.dead_sprites.add(bee)
 			if len(bee_hit_list) > 0:
 				bullet_list.remove(bullet)
-		if pygame.sprite.spritecollideany(krystal, current_game.level_1.enemy_sprites) is not None:
-			krystal.is_hit = True
+		for bullet in bullet_list:
+			vulture_hit_list = pygame.sprite.spritecollide(
+				bullet, current_game.level_1.vulture_sprites, True)
+			for vulture in vulture_hit_list:
+				vulture.alive = False
+				current_game.level_1.dead_sprites.add(vulture)
+			if len(vulture_hit_list) > 0:
+				bullet_list.remove(bullet)
 		for bullet in bullet_list:
 			if bullet.state == 'expired':
 				bullet_list.remove(bullet)
-		for bee in current_game.level_1.enemy_sprites.sprites():
+		for bee in current_game.level_1.bee_sprites.sprites():
 			bee.buzz(krystal, bee_sound)
 
+		#handle enemy hits
+		bee_stings = pygame.sprite.spritecollide(krystal, current_game.level_1.bee_sprites, False)
+		if bee_stings:
+			if not krystal.invincible:
+				krystal.hit_sequence()
+		vulture_pecks = pygame.sprite.spritecollide(krystal, current_game.level_1.vulture_sprites, False)
+		if vulture_pecks:
+			if not krystal.invincible:
+				krystal.hit_sequence()
 
-
-		offset_tuple = camera_shifter.apply(krystal)
+		camera_offset = camera_shifter.apply(krystal)
 
 		#-----------drawing functions
 		#clear screen
 		screen.fill(constants.WHITE)
-		screen.blit(background_image, offset_tuple)
+		screen.blit(background_image, camera_offset)
 
 		#draw krystal
-		krystal.rect.center = krystal.char_rect.center
-		krystal.rect.x = krystal.char_rect.x - 18
-		screen.blit(krystal.image, (krystal.rect.x + offset_tuple[0],
-									krystal.rect.y + offset_tuple[1]))
-		current_game.level_1.enemy_sprites.update()
 
-		#draw enemy
-		for bees in current_game.level_1.enemy_sprites:
-			screen.blit(bees.image, (bees.rect.x + offset_tuple[0],
-									 bees.rect.y + offset_tuple[1]))
+		# adjustment needed to compensate for wide sprite due to gun
+		if krystal.shooting == True and krystal.facing == 'left':
+			screen.blit(krystal.image, (krystal.rect.x + camera_offset[0] -
+										krystal.shot_frames_offset[krystal.blit_frame] -
+										constants.KRYSTAL_INFLATE_X / 2,
+										krystal.rect.y + camera_offset[1] - constants.KRYSTAL_INFLATE_Y))
+			if krystal.shot_frame > 2:
+				krystal.shooting = False
+				krystal.shot_frame = 0
+		else:
+			screen.blit(krystal.image, (krystal.rect.x + camera_offset[0] - (constants.KRYSTAL_INFLATE_X / 2),
+									krystal.rect.y + camera_offset[1] - constants.KRYSTAL_INFLATE_Y + 2))
+			if krystal.shot_frame > 2:
+				krystal.shooting = False
+				krystal.shot_frame = 0
+
+		# UNCOMMENT FOR SEEING ACTUAL CHARACTER/ENEMY RECTANGLE LOCATIONS
+		# pygame.draw.rect(screen, constants.BLACK, (krystal.rect.x + camera_offset[0],
+		# 								krystal.rect.y + camera_offset[1], krystal.rect.width, krystal.rect.height))
+
+		# for sprite in current_game.level_1.dead_sprites:
+		# 	pygame.draw.rect(screen, constants.BLACK, (sprite.rect.x + camera_offset[0],
+		# 											   sprite.rect.y + camera_offset[1], sprite.rect.width,
+		# 											   sprite.rect.height))
+
+		# for sprite in current_game.level_1.vulture_sprites:
+		# 	pygame.draw.rect(screen, constants.BLACK, (sprite.rect.x + camera_offset[0],
+		# 											   sprite.rect.y + camera_offset[1], sprite.rect.width,
+		# 											   sprite.rect.height))
+
+
+
+		#draw enemies
+		for bees in current_game.level_1.bee_sprites:
+			screen.blit(bees.image, (bees.rect.x + camera_offset[0] - (constants.BEE_INFLATE_X / 3),
+									 bees.rect.y + camera_offset[1] - (constants.BEE_INFLATE_Y / 2 + 5)))
+		for shrooms in current_game.level_1.shroom_sprites:
+			screen.blit(shrooms.image, (shrooms.rect.x + camera_offset[0],
+										shrooms.rect.y + camera_offset[1]))
+		for vultures in current_game.level_1.vulture_sprites:
+			screen.blit(vultures.image, (vultures.rect.x + camera_offset[0],
+										vultures.rect.y + camera_offset[1]))
+		for enemy in current_game.level_1.dead_sprites:
+			screen.blit(enemy.image, (enemy.rect.x + camera_offset[0],
+										enemy.rect.y + camera_offset[1]))
 
 		#draw bullets
 		for bullet in bullet_list:
-			screen.blit(laser, (bullet.rect.x + offset_tuple[0],
-								 bullet.rect.y + offset_tuple[1]))
-
-
+			screen.blit(gunshot, (bullet.rect.x + camera_offset[0],
+								 bullet.rect.y + camera_offset[1]))
 
 		#draw variables on screen for debugging
-		if krystal.is_hit == True:
-			texts('you fucking got hit', (constants.DISPLAY_WIDTH / 2, constants.DISPLAY_HEIGHT / 2))
-		# texts('y=', krystal.rect.y, (0, 20))
-		# texts("fps= ", str(round(clock.get_fps())), (0, 40))
-		# texts('dx=', krystal.dx, (constants.DISPLAY_WIDTH - 80, 0))
-		# texts('dy=', krystal.dy, (constants.DISPLAY_WIDTH - 80, 20))
-		# texts('collide=', krystal.collision_status, (constants.DISPLAY_WIDTH - 200, 40))
+		texts("fps= " + str(round(clock.get_fps())), (0, 0))
+		texts("life= " + str(krystal.life), (0, 20))
 
+		#exit if krystal dies
+		if krystal.life <= 0:
+			done = True
 
 		#update the display
 		pygame.display.flip()
@@ -158,8 +205,8 @@ def main():
 
 def texts(text, location):
 	'''draws game variables on the screen'''
-	font=pygame.font.Font(None,30)
-	scoretext=font.render(text, 1,(255, 0, 0))
+	font=pygame.font.Font(None, 20)
+	scoretext=font.render(text, 1,(0, 0, 0))
 	screen.blit(scoretext, location)
 
 if __name__=="__main__":

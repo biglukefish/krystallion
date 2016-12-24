@@ -14,10 +14,10 @@ class Bullet(pygame.sprite.Sprite):
 		self.image = pygame.Surface([8, 8])
 		self.rect = self.image.get_rect()
 		if facing == 'right':
-			self.rect.x = x + 15
+			self.rect.x = x + 70
 		else:
-			self.rect.x = x - 5
-		self.rect.y = y + 40
+			self.rect.x = x - 50
+		self.rect.y = y + 19
 		self.initial_x = initial_x
 		self.direction = facing
 		self.state = 'blazing across the screen'

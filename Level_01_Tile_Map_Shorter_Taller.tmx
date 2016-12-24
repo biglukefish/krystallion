@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="118" height="10" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="Ground" tilewidth="64" tileheight="64">
+  <image source="spritesheet_ground_64_px_tiles.png" width="512" height="1024"/>
+ </tileset>
+ <tileset firstgid="129" name="Sky" tilewidth="64" tileheight="64">
+  <image source="bg.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="145" name="cloud1" tilewidth="190" tileheight="127">
+  <image source="cloud1.png" width="190" height="127"/>
+ </tileset>
+ <tileset firstgid="146" name="WingyDings" tilewidth="64" tileheight="64">
+  <image source="spritesheet_wingdings.png" width="512" height="1024"/>
+ </tileset>
+ <tileset firstgid="274" name="junglebg" tilewidth="896" tileheight="640" spacing="1">
+  <image source="level_1_assets/BG.png" width="896" height="640"/>
+ </tileset>
+ <tileset firstgid="275" name="JungleTerrain" tilewidth="64" tileheight="64">
+  <image source="level_1_assets/JungleTiles.png" width="320" height="320"/>
+ </tileset>
+ <layer name="JungleBG" width="118" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztyzENAAAIA7BhAf9iJ4OEtH8TAAAAgBs73sdXuA8ArA==
+  </data>
+ </layer>
+ <layer name="JungleTerrain" width="118" height="10">
+  <data encoding="base64" compression="zlib">
+   eJztldEKgCAMRds3uKK3ivz/b0zJoIc5VmhG3QPnQREUd6ddBwAAAICnman1CUApcrV0Yb4n+1iDkRdQgYn2/B4uP8pZjTdY6tPY52vS2u/g/Qyhlj453qyr5Q+Ia/iUIUn+SLaYbGp3Id2NZA6trs54vit6xdJ7tXIDW3wOQg==
+  </data>
+ </layer>
+ <objectgroup name="Terrain" width="118" height="10" visible="0">
+  <object x="0" y="576" width="640" height="64"/>
+  <object x="320" y="320" width="64" height="48"/>
+  <object x="512" y="256" width="64" height="48"/>
+  <object x="448" y="448" width="64" height="48"/>
+  <object x="704" y="320" width="128" height="64"/>
+  <object x="960" y="320" width="128" height="64"/>
+  <object x="1216" y="320" width="128" height="64"/>
+  <object x="1344" y="576" width="384" height="64"/>
+  <object x="1792" y="448" width="64" height="64"/>
+  <object x="1920" y="320" width="64" height="64"/>
+  <object x="2112" y="448" width="64" height="192"/>
+  <object x="2304" y="448" width="64" height="192"/>
+  <object x="2560" y="576" width="1344" height="64"/>
+  <object x="3200" y="512" width="128" height="64"/>
+  <object x="3776" y="512" width="128" height="64"/>
+  <object x="3968" y="384" width="320" height="48"/>
+  <object x="4352" y="512" width="128" height="64"/>
+  <object x="4352" y="576" width="3200" height="64"/>
+ </objectgroup>
+ <objectgroup name="Trampolines" width="118" height="10" visible="0"/>
+</map>

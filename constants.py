@@ -1,5 +1,4 @@
 import imaging
-import spritesheet
 
 #color constants
 BLACK = (0, 0, 0)
@@ -11,8 +10,8 @@ SKYBLUE = (67, 111, 168)
 PINK = (255, 0, 128)
 
 #display and level size constants
-DISPLAY_WIDTH = 675
-DISPLAY_HEIGHT = 400
+DISPLAY_WIDTH = 1000
+DISPLAY_HEIGHT = 640
 DISPLAY_SIZE = (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 
 #level constants -->  width, height, x location, y location
@@ -20,29 +19,21 @@ LEVEL_01 = [[0, 0, 0, 0]]
 
 #character constants
 HERO_SIZE = (50, 60)
-STARTING_POSITION_X, STARTING_POSITION_Y = DISPLAY_WIDTH / 3, DISPLAY_HEIGHT * 3 / 4
-HERO_RUNNING_SPEED = 5
+STARTING_POSITION_X, STARTING_POSITION_Y = DISPLAY_WIDTH / 6, DISPLAY_HEIGHT * 3 / 4
+HERO_RUNNING_SPEED = 7
 HERO_JUMP_VELOCITY = 16
 
 #other constants
 GRAVITY_CONSTANT = 1
-BULLET_SPEED = 11
+BULLET_SPEED = 20
 
 #dictionaries of image locations
-ENEMY_IMAGES = imaging.Xmlenemies().get_small_dict()
-
-#lists of krystal image locations
-KRYSTAL_STANDING = [
-	(0, 0, 50, 60), (50, 0, 50, 60), (100, 0, 50, 60),
-	(150, 0, 50, 60), (200, 0, 50, 60), (250, 0, 50, 60)]
-KRYSTAL_WALKING = [
-	(0, 60, 50, 60), (50, 60, 50, 60),
-	(100, 60, 50, 60), (150, 60, 50, 60)]
-KRYSTAL_JUMPING = [
-	(200, 60, 50, 55), (250,60, 50, 55)]
-KRYSTAL_FLYING = [
-	(200, 60, 50, 55)]
-KRYSTAL_FALLING = [
-	(250, 195, 50, 60)]
-
-
+KRYSTAL_IMAGES = imaging.get_image_locations('assets/krystal_images/image_locations.json')
+KRYSTAL_OFFSETS = imaging.get_krystal_offsets()
+L_1_ENEMIES_1 = imaging.get_image_locations('assets/level_1_assets/level_1_enemies_1.json')
+KRYSTAL_INFLATE_X = 20
+KRYSTAL_INFLATE_Y = 20
+BEE_INFLATE_X = 30
+BEE_INFLATE_Y = 10
+VULTURE_INFLATE_X = 0
+VULTURE_INFLATE_Y = 0
