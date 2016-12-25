@@ -2,6 +2,7 @@ import pygame
 import pytmx
 import characters
 import platforms
+import leveldata
 
 """
 holds game object and level objects
@@ -10,57 +11,47 @@ holds game object and level objects
 
 class Game(object):
 	'''class for new instances of game'''
-	level = 1
 	def __init__(self):
 		# Create level objects
-		self.level_1 = Level_1()
+		self.current_level_number = 0
+		self.current_level = Level(leveldata.level_data[0])
+		self.krystal = characters.Krystal(self)
 
-class Level(object):
-	'''superclass for level'''
+	def go_to(self, level):
+		self.current_level_number = level
+		self.current_level = Level(leveldata.level_data[level])
+
+class Scene(object):
 	def __init__(self):
 		pass
 
-	def create_tmx_rects(self, layer_name, level_map):
-		'''create list of rectangles for use in collision.
-		:param layer_name: string
-		:return: list of rect objects
-		'''
-		rectangles = []
-		tiled_map = pytmx.TiledMap(level_map)
-		group = tiled_map.get_layer_by_name(layer_name)
-		for obj in group:
-			objrect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
-			rectangles.append(objrect)
-		return rectangles
+
+class Level(Scene):
+
+	def __init__(self, level_data):
+		super(Level, self).__init__()
 
 
-class Level_1(Level):
-	'''level one, the adventure begins'''
+		self.image = pygame.image.load(level_data['bg_image']).convert()
+		self.level_rect = self.image.get_rect()
+		pygame.mixer.music.load(level_data['bg_tunes'])
+		pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
+		pygame.mixer.music.play(loops=-1)
+		self.tmx_file = level_data['tmx_file']
+		self.bee_coords = level_data['bee_coords']
+		self.vulture_coords = level_data['vulture_coords']
 
-	image = 'assets/level_1_assets/Level_01_Tile_Map_Shorter_Taller.bmp'
-	level_1_tmx_file = 'assets/level_1_assets/Level_01_Tile_Map_Shorter_Taller.tmx'
-	all_collision_rects = []
-	bee_coords = [(1344, 192), (1920, 256), (3136, 448),
-				  (3840, 320), (5504, 448), (6016, 512)]
-	vulture_coords = [(1344, 192), (1920, 256), (3136, 448),
-				  (3840, 320), (5504, 448), (6016, 512)]
+		# create mushrooms, each tile in background is 64x64 pixels.
+		# params --> x, bottom, left bound, right bound
+		self.shroom_coords = level_data['shroom_coords']
 
-	# create mushrooms, each tile in background is 64x64 pixels.
-	# params --> x, bottom, left bound, right bound
-	shroom_coords = [(21*64, 9*64, 21*64, 26*64), (8*64, 9*64, 1*64, 9*64) ]
-
-
-	def __init__(self):
-		super(Level_1, self).__init__()
-
-		# create collision rects for level
-		self.terrain_rects = self.create_tmx_rects('Terrain', self.level_1_tmx_file)
-
-		# add to list
+		# create collision rects for level and change them
+		# into sprites
+		self.terrain_rects = self.create_tmx_rects('Terrain', self.tmx_file)
+		self.all_collision_rects = []
+		# TODO can I delete the two lines below?  Answer is NO
 		for terrain in self.terrain_rects:
 			self.all_collision_rects.append(terrain)
-
-		# create sprites out of the rects
 		self.platform_sprites = pygame.sprite.Group()
 		for rect in self.terrain_rects:
 			plat = platforms.Platforms(rect.x, rect.y, rect.width, rect.height)
@@ -86,7 +77,15 @@ class Level_1(Level):
 		#create sprite group for dying sprites
 		self.dead_sprites = pygame.sprite.Group()
 
-
-
-class Level_2(Level):
-	'''level two'''
+	def create_tmx_rects(self, layer_name, level_map):
+		'''create list of rectangles for use in collision.
+		:param layer_name: string
+		:return: list of rect objects
+		'''
+		rectangles = []
+		tiled_map = pytmx.TiledMap(level_map)
+		group = tiled_map.get_layer_by_name(layer_name)
+		for obj in group:
+			objrect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+			rectangles.append(objrect)
+		return rectangles

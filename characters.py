@@ -6,6 +6,7 @@ import constants
 import spritesheet
 import assets
 import math
+import leveldata
 
 
 
@@ -55,15 +56,11 @@ class Krystal(pygame.sprite.Sprite):
 								   constants.STARTING_POSITION_Y
 
 		# trigger locations
-		self.bee_triggers = [
-			'self.rect.x > 300', 'self.rect.x > 900',
-			'self.rect.x > 2000', 'self.rect.x > 2500',
-			'self.rect.x > 4000', 'self.rect.x > 5000'
+		self.bee_triggers = leveldata.level_data[
+			self.game.current_level_number]['bee_triggers'
 		]
-		self.vulture_triggers = [
-			'self.rect.x > 300', 'self.rect.x > 900',
-			'self.rect.x > 2000', 'self.rect.x > 2500',
-			'self.rect.x > 4000', 'self.rect.x > 5000'
+		self.vulture_triggers = leveldata.level_data[
+			self.game.current_level_number]['vulture_triggers'
 		]
 
 	def move_horizontal(self):
@@ -86,7 +83,7 @@ class Krystal(pygame.sprite.Sprite):
 		if self.check_for_collision(
 				self.rect.x, self.rect.y + 2,
 				self.rect.width, self.rect.height,
-				self.game.level_1.all_collision_rects
+				self.game.current_level.all_collision_rects
 				) == False and self.dy < 50:
 			self.on_ground = False
 			self.dy += constants.GRAVITY_CONSTANT
@@ -95,14 +92,16 @@ class Krystal(pygame.sprite.Sprite):
 
 	def update(self):
 
-		self.apply_gravity()
-		self.apply_collisions()
-		self.update_image()
-		self.apply_triggers()
-		self.pacer += 1
-		self.dx = 0
 		if self.invincible:
 			self.go_invincible()
+		else:
+			self.apply_gravity()
+			self.apply_collisions()
+			self.update_image()
+			self.apply_triggers()
+			self.pacer += 1
+			self.dx = 0
+
 
 		if self.rect.y > constants.DISPLAY_HEIGHT:
 			self.life = 0
@@ -119,8 +118,8 @@ class Krystal(pygame.sprite.Sprite):
 
 		self.rect.x += self.dx
 
-		platform_hits_x = pygame.sprite.spritecollide(self, self.game.level_1.platform_sprites, False)
-		mushroom_hits_x = pygame.sprite.spritecollide(self, self.game.level_1.shroom_sprites, False)
+		platform_hits_x = pygame.sprite.spritecollide(self, self.game.current_level.platform_sprites, False)
+		mushroom_hits_x = pygame.sprite.spritecollide(self, self.game.current_level.shroom_sprites, False)
 
 		for platform in platform_hits_x:
 			self.process_platform_collision('x', platform)
@@ -132,10 +131,10 @@ class Krystal(pygame.sprite.Sprite):
 
 		self.rect.y += self.dy
 
-		platform_hits_y = pygame.sprite.spritecollide(self, self.game.level_1.platform_sprites, False)
+		platform_hits_y = pygame.sprite.spritecollide(self, self.game.current_level.platform_sprites, False)
 		for platform in platform_hits_y:
 			self.process_platform_collision('y', platform)
-		mushroom_hits_y = pygame.sprite.spritecollide(self, self.game.level_1.shroom_sprites, False)
+		mushroom_hits_y = pygame.sprite.spritecollide(self, self.game.current_level.shroom_sprites, False)
 		for mushroom in mushroom_hits_y:
 			self.process_mushroom_collision('y', mushroom)
 
@@ -180,9 +179,10 @@ class Krystal(pygame.sprite.Sprite):
 
 
 		if axis == 'y':
+			self.dy = 0
 			mushroom.alive = False
-			mushroom.add(self.game.level_1.dead_sprites)
-			mushroom.remove(self.game.level_1.shroom_sprites)
+			mushroom.add(self.game.current_level.dead_sprites)
+			mushroom.remove(self.game.current_level.shroom_sprites)
 
 	def check_for_collision(self, x, y, width, height, rectangles):
 		''' takes a rectangle and checks to see if it collides with
@@ -336,17 +336,22 @@ class Krystal(pygame.sprite.Sprite):
 		'''
 		try:
 			if eval(self.vulture_triggers[0]):
-				vulture = Vulture(self.game.level_1.vulture_coords[0])
-				self.game.level_1.vulture_sprites.add(vulture)
+				vulture = Vulture(self.game.current_level.vulture_coords[0])
+				self.game.current_level.vulture_sprites.add(vulture)
 				self.vulture_triggers.pop(0)
-				self.game.level_1.vulture_coords.pop(0)
+				self.game.current_level.vulture_coords.pop(0)
 		except IndexError:
 			pass
 
 	def go_invincible(self):
-		print "I'm invincible!"
+		self.dx, self.dy = 0, 0
+		if self.facing == 'right':
+			self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.dead_frames[1])
+		elif self.facing == 'left':
+			self.image = spritesheet.KRYSTAL_SPRITESHEET.get_image(self.dead_frames[1])
+			self.image = pygame.transform.flip(self.image, True, False)
 		self.invincible_counter += 1
-		if self.invincible_counter > 120:
+		if self.invincible_counter > 60:
 			self.invincible_counter = 0
 			self.invincible = False
 
